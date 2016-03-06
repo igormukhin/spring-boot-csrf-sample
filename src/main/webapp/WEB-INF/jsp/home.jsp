@@ -38,6 +38,8 @@
     </div>
 
     <c:url var="postUrl" value="/post"/>
+    <c:url var="uploadUrl" value="/upload"/>
+
     <div class="row marketing">
         <div class="col-lg-4">
             <h4>POST without CSRF-token</h4>
@@ -94,6 +96,27 @@
     </div>
 
     <div class="row marketing">
+        <div class="col-lg-4">
+            <h4>Upload form with CSRF 1</h4>
+            <p>We put the token in the URL</p>
+            <form action="${uploadUrl}?${_csrf.parameterName}=${_csrf.token}" method="post" enctype="multipart/form-data">
+                <input type="file" name="file">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+
+        <div class="col-lg-4">
+            <h4>Upload form with CSRF 2</h4>
+            <p>We put the token in input hidden</p>
+            <form action="${uploadUrl}" method="post" enctype="multipart/form-data">
+                <sec:csrfInput />
+                <input type="file" name="file">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row marketing">
         <div class="col-lg-12">
             <h4>Info</h4>
             <dl>
@@ -101,12 +124,12 @@
                 <dd><c:out value="${pageContext.request.session.id}" /></dd>
             </dl>
             <dl>
-                <dt>Session scope:</dt>
-                <dd><c:out value="${sessionScope}" /></dd>
-            </dl>
-            <dl>
                 <dt>_csrf.token:</dt>
                 <dd><c:out value="${_csrf.token}" /></dd>
+            </dl>
+            <dl>
+                <dt>Session scope:</dt>
+                <dd><c:out value="${sessionScope}" /></dd>
             </dl>
         </div>
     </div>
