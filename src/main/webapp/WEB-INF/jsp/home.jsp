@@ -59,6 +59,14 @@
         </div>
 
         <div class="col-lg-4">
+            <h4>POST with token on URL</h4>
+            <p>We put CSRF token on the POST URL</p>
+            <form action="${postUrl}?${_csrf.parameterName}=${_csrf.token}" method="post">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+
+        <div class="col-lg-4">
             <h4>POST using csrfInput tag</h4>
             <p>We add token explicitly</p>
             <form action="${postUrl}" method="post">

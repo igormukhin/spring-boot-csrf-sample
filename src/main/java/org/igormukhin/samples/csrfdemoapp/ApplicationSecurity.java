@@ -1,6 +1,7 @@
 package org.igormukhin.samples.csrfdemoapp;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -13,13 +14,21 @@ import org.springframework.security.web.csrf.CsrfFilter;
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private SecurityProperties securityProperties;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             .anyRequest().fullyAuthenticated()
             .and().formLogin().loginPage("/login").failureUrl("/login?error").permitAll()
-            .and().logout().permitAll()
-            .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);;
+            .and().logout().permitAll();
+
+        if (securityProperties.isEnableCsrf()) {
+            http.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
+        } else {
+            http.csrf().disable();
+        }
     }
 
     @Override
